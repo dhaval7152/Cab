@@ -1,4 +1,6 @@
 from Bucket import *
+from Node import *
+from Rule import *
 
 class BucketTree():
     def __init__(self, RuleSet = None):
@@ -38,6 +40,7 @@ class BucketTree():
 
 
     def countOnes(self, tmp):
+
         sub = 1 << 7
         count = 0
         while tmp > 0:
@@ -45,3 +48,7 @@ class BucketTree():
             sub = sub >> 1
             count += 1
         return count
+
+    def matchRuleAndNode(self, node, rule):
+
+    def matchPrefix(self, addressOne, maskOne, addressTwo):
