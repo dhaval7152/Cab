@@ -21,14 +21,23 @@ class BucketTree():
                 init = [0, 0, 0, 0]
         return dims
 
+    # got which split is better
     def splitNode(self, dims):
         for dim in dims:
-            cost = self.split(self, dim)
+            cost = self.split(dim)
+            return cost
 
     def split(self, dim):
+        digits = 0;
+        for i in range(4):
+            for j in range(dim[i]):
+                digits = self.countOnes(self.bucket.node.mask)
 
-    def countPrefix(self):
-        tmp = self.bucket.node
+
+        return digits
+
+
+    def countOnes(self, tmp):
         sub = 1 << 7
         count = 0
         while tmp > 0:
