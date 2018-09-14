@@ -5,6 +5,8 @@ from Rule import *
 class BucketTree():
     def __init__(self, RuleSet = None):
         self.bucket = Bucket()
+        self.childNum = 0
+        self.children = []
 
         self.dims = self.gen_dim()
         # dim got
@@ -32,15 +34,46 @@ class BucketTree():
     def split(self, dim):
         digits = 0
         for i in range(4):
-            for j in range(dim[i]):
-                digits = self.countOnes(self.bucket.node.mask)
+
+            # this dimension needs one cut
+            if dim[i] == 1:
+                digits = self.countOnes(self.bucket.node.mask[i])
+
+                self.oneDimOneCut();
+
+                
+            # this dimension needs two cut
+            if dim[i] == 2:
+                digits = self.countOnes(self.bucket.node.mask[i])
+
+
+
+
 
 
         return digits
 
+    def oneDimOneCut(self):
+        tmpChild = Bucket()
+        tmpChild.node.mask = self.bucket.node.mask
+        tmpChild.node.address = self.bucket.node.address
+
+        # Add left child
+        self.childNum += 1
+        tmpChild.node.mask[i] = self.bucket.node.address[i] + 1 << (8 - digits)
+        tmpChild.node.address[i] = self.bucket.node.address[i]
+        self.children.append(tmpChild)
+
+        # Add right child
+        self.childNum += 1
+        tmpChild.node.mask[i] = self.bucket.node.address[i] + 1 << (8 - digits)
+        tmpChild.node.address[i] = self.bucket.node.address[i] + 1 << (8 - digits)
+        self.children.append(tmpChild)
+
+    def oneDimTwoCut(self):
+
 
     def countOnes(self, tmp):
-
         sub = 1 << 7
         count = 0
         while tmp > 0:
