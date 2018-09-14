@@ -42,4 +42,24 @@ class BucketTree():
 
     def matchRuleAndNode(self, node, rule):
 
-    def matchPrefix(self, addressOne, maskOne, addressTwo):
+        if not self.matchPrefix(node.address[0], node.mask[0], rule.address[0], rule.mask[0]):
+            return False
+        if not self.matchPrefix(node.address[1], node.mask[1], rule.address[1], rule.mask[1]):
+            return False
+        if not self.matchPrefix(node.address[2], node.mask[2], rule.address[2], rule.mask[2]):
+            return False
+        if not self.matchPrefix(node.address[3], node.mask[3], rule.address[3], rule.mask[3]):
+            return False
+
+        return True
+
+
+    # Find is two pair of (prefix, mask) overlapping
+    def matchPrefix(self, addressOne, maskOne, addressTwo, maskTwo):
+        maskShort = 0
+        if (maskOne > maskTwo):
+            maskShort = maskTwo
+        else:
+            maskShort = maskOne
+
+        return (addressOne & maskShort) == (addressTwo & maskShort)
