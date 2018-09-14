@@ -30,7 +30,7 @@ class BucketTree():
             return cost
 
     def split(self, dim):
-        digits = 0;
+        digits = 0
         for i in range(4):
             for j in range(dim[i]):
                 digits = self.countOnes(self.bucket.node.mask)
@@ -49,6 +49,7 @@ class BucketTree():
             count += 1
         return count
 
+    # This function is to judge whether the node is associated with the rule
     def matchRuleAndNode(self, node, rule):
 
         if not self.matchPrefix(node.address[0], node.mask[0], rule.address[0], rule.mask[0]):
