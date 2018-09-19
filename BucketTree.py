@@ -3,11 +3,15 @@ from Node import *
 from Rule import *
 
 class BucketTree():
-    def __init__(self, RuleSet = None, thr = 5):
+    def __init__(self, ruleName = None, thr = 5):
         self.root = Node()
 
         self.dims = self.gen_dim()
         # dim got
+
+        ruleSet = self.ruleSetParser(ruleName)
+
+        self.loadRootRules(ruleSet)
 
         self.root.splitNode(dims, thr)
 
@@ -28,3 +32,12 @@ class BucketTree():
                 dims.append(init)
                 init = [0, 0, 0, 0]
         return dims
+
+    # load ruleSet into the root of bucketTree
+    def loadRootRules(self, ruleSet):
+        for rule in ruleSet:
+            self.root.append(rule)
+
+    # get a string of fileName, return a list of rules
+    def ruleSetParser(self, ruleName):
+        return ruleSet
