@@ -1,0 +1,7 @@
+#macOS thumbnail files
+._*
+.DS_Store
+.idea
+*.crc
+*.iml
+*.pyc

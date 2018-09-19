@@ -1,13 +1,21 @@
 from Bucket import *
+from Node import *
+from Rule import *
 
 class BucketTree():
-    def __init__(self, RuleSet = None):
-        self.bucket = Bucket()
+    def __init__(self, RuleSet = None, thr = 5):
+        self.root = Node()
 
         self.dims = self.gen_dim()
         # dim got
 
-        self.splitNode(self.dims)
+        self.root.splitNode(dims, thr)
+
+        self.thr = thr
+
+    root = Node()       # The root node of bucketTree
+    dims = []           # The dimension of cut
+    thr = 0             # The threshold of one bucket
 
     # cal the dim of split
     def gen_dim(self):
@@ -20,19 +28,3 @@ class BucketTree():
                 dims.append(init)
                 init = [0, 0, 0, 0]
         return dims
-
-    def splitNode(self, dims):
-        for dim in dims:
-            cost = self.split(self, dim)
-
-    def split(self, dim):
-
-    def countPrefix(self):
-        tmp = self.bucket.node
-        sub = 1 << 7
-        count = 0
-        while tmp > 0:
-            tmp -= sub
-            sub = sub >> 1
-            count += 1
-        return count
