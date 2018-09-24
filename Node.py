@@ -1,109 +1,138 @@
+import sys
+
 class Node():
 
-    def __init__(self, parentNode = None, address = [0,0,0,0], mask = [0,0,0,0]):
+    def __init__(self, parentNode = None, address = [0,0,0,0], mask = [0,0,0,0], thr = 5):
         self.parentNode = parentNode
         self.address = address
         self.mask = mask
+        self.thr = thr
 
     address = []        # The 4-tuple address of the node [SrcIP, DstIP, SrcPort, DstPort]
     mask = []           # The 4-tuple masks of the node [same as above]
 
+    dims = []           # The dimension of cut
     relatedRules = []   # The related rules
 
     parentNode = None   # The parent Node of this node
     childNodeList = []  # THe child Nodes of this node
-    chileNum = 0        # The num of child Nodes of this node
+    tmpNodeList = []    # The tmp child Nodes of this node
 
     # got which split is better
-    def splitNode(self, dims, thr):
+    def splitNode(self):
+        # get dim for split
+        self.dims = self.gen_dim()
+        print "dim got"
+
         cost = sys.maxint
         bestDim = []
-        for dim in dims:
-            tmpCost = self.split(dim, thr)
+        for dim in self.dims:
+            tmpCost = self.split(dim)
+            print tmpCost
 
+            # if best cut
             if tmpCost < cost:
-                bestDim = dim
+                bestDim = list(dim)
+                self.childNodeList = list(self.tmpNodeList)
 
-            self.childNodeList = []
-            self.chileNum = 0
+            self.tmpNodeList = []
+            print len(self.tmpNodeList)
 
-    def split(self, dim, thr):
-        digits = 0;
+        return cost
 
-        # got the tmp split
+        # cal the dim of split
+    def gen_dim(self):
+        dims = []
+        init = [0, 0, 0, 0]
+        for x in range(4):
+            for y in range(4):
+                init[x] += 1
+                init[y] += 1
+                dims.append(init)
+                init = [0, 0, 0, 0]
+        return dims
+
+    def split(self, dim):
+
+        # cal the tmp split
         for i in range(4):
 
+            if i <= 1:
+                totalDigits = 32
+            else:
+                totalDigits = 16
             # this dimension needs one cut
             if dim[i] == 1:
-                digits = self.countOnes(self.mask[i])
+                digits = self.countOnes(self.mask[i], totalDigits)
 
                 tmpChild = Node()
-                tmpChild.mask = self.mask
-                tmpChild.node.address = self.address
+                tmpChild.address = list(self.address)
+                tmpChild.mask =  list(self.mask)
 
                 # Add left child
-                self.childNum += 1
-                tmpChild.mask[i] = self.address[i] + 1 << (31 - digits)
-                tmpChild.address[i] = self.address[i] + 0 << (31 - digits)
-                self.childNodeList.append(tmpChild)
+                tmpChild.mask[i] = self.address[i] + 1 << (totalDigits - 1 - digits)
+                tmpChild.address[i] = self.address[i] + 0 << (totalDigits - 1 - digits)
+                self.tmpNodeList.append(tmpChild)
 
                 # Add right child
-                self.childNum += 1
-                tmpChild.mask[i] = self.address[i] + 1 << (31 - digits)
-                tmpChild.address[i] = self.address[i] + 1 << (31 - digits)
-                self.childNodeList.append(tmpChild)
+                tmpChild.mask[i] = self.address[i] + 1 << (totalDigits - 1 - digits)
+                tmpChild.address[i] = self.address[i] + 1 << (totalDigits - 1 - digits)
+                self.tmpNodeList.append(tmpChild)
 
             # this dimension needs two cut
             if dim[i] == 2:
-                digits = self.countOnes(self.mask[i])
+                digits = self.countOnes(self.mask[i], totalDigits)
 
                 tmpChild = Node()
-                tmpChild.mask = self.mask
-                tmpChild.address = self.address
+                tmpChild.address = list(self.address)
+                tmpChild.mask = list(self.mask)
 
                 # Add first child
-                self.childNum += 1
-                tmpChild.mask[i] = self.address[i] + 3 << (30 - digits)
-                tmpChild.address[i] = self.address[i] + 0 << (30 - digits)
-                self.childNodeList.append(tmpChild)
+                tmpChild.mask[i] = self.address[i] + 3 << (totalDigits - 2 - digits)
+                tmpChild.address[i] = self.address[i] + 0 << (totalDigits - 2 - digits)
+                self.tmpNodeList.append(tmpChild)
 
                 # Add second child
-                self.childNum += 1
-                tmpChild.mask[i] = self.address[i] + 3 << (30 - digits)
-                tmpChild.address[i] = self.address[i] + 1 << (30 - digits)
-                self.childNodeList.append(tmpChild)
+                tmpChild.mask[i] = self.address[i] + 3 << (totalDigits - 2 - digits)
+                tmpChild.address[i] = self.address[i] + 1 << (totalDigits - 2 - digits)
+                self.tmpNodeList.append(tmpChild)
 
                 # Add third child
-                self.childNum += 1
-                tmpChild.mask[i] = self.address[i] + 3 << (30 - digits)
-                tmpChild.address[i] = self.address[i] + 2 << (30 - digits)
-                self.childNodeList.append(tmpChild)
+                tmpChild.mask[i] = self.address[i] + 3 << (totalDigits - 2 - digits)
+                tmpChild.address[i] = self.address[i] + 2 << (totalDigits - 2 - digits)
+                self.tmpNodeList.append(tmpChild)
 
                 # Add fourth child
-                self.childNum += 1
-                tmpChild.mask[i] = self.address[i] + 3 << (30 - digits)
-                tmpChild.address[i] = self.address[i] + 3 << (30 - digits)
-                self.childNodeList.append(tmpChild)
+                tmpChild.mask[i] = self.address[i] + 3 << (totalDigits - 2 - digits)
+                tmpChild.address[i] = self.address[i] + 3 << (totalDigits - 2 - digits)
+                self.tmpNodeList.append(tmpChild)
 
+        print len(self.tmpNodeList), len(self.relatedRules)
+        for childNode in self.tmpNodeList:
+            for rule in childNode.relatedRules:
+                print rule.address
         # Add rules for each childNode
-        for childNode in self.childNodeList:
+        for childNode in self.tmpNodeList:
             for rule in self.relatedRules:
                 if self.matchRuleAndNode(childNode, rule):
                     childNode.relatedRules.append(rule)
 
-        for childNode in self.childNodeList:
-            if len(childNode.relatedRules) > thr:
-                childNode.split(dim, thr)
+
+
+        for childNode in self.tmpNodeList:
+            if len(childNode.relatedRules) > self.thr:
+                childNode.splitNode()
 
         sum = 0
-        for childNode in self.childNodeList:
+        for childNode in self.tmpNodeList:
             sum += len(childNode.relatedRules)
 
         return sum
 
 
-    def countOnes(self, tmp):
-        sub = 1 << 7
+    def countOnes(self, tmp, totaldigits):
+        # print tmp, totaldigits
+        sub = 1 << (totaldigits - 1)
         count = 0
         while tmp > 0:
             tmp -= sub
