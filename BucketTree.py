@@ -5,7 +5,7 @@ import socket
 import struct
 
 class BucketTree():
-    def __init__(self, fileName = None, thr = 5):
+    def __init__(self, fileName = None, thr = 2):
         self.root = Node(thr = thr)
 
         # parse the ruleFile and load all rules into root's relatedRules
