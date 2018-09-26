@@ -14,4 +14,4 @@ def class:
     name = ""                   # Class Variable, like static in Java
 ```
 
-- #### << in Java has very low priority, even lower than +/-
+- #### << in Python has very low priority, even lower than +/-
