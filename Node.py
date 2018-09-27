@@ -30,8 +30,15 @@ class Node():
             if tmpCost < cost:
                 bestDim = list(dim)
                 self.childNodeList = list(self.tmpNodeList)
+                cost = tmpCost
 
             self.tmpNodeList = []
+
+        for childNode in self.childNodeList:
+            if len(childNode.relatedRules) > self.thr:
+                childNode.splitNode()
+
+        # print cost
 
         return cost
 
@@ -49,6 +56,7 @@ class Node():
 
     def split(self, dim):
 
+        tmpList = []
         # cal the tmp split
         for i in range(4):
 
@@ -66,13 +74,13 @@ class Node():
                 tmpChild = Node(self, list(self.address), list(self.mask))
                 tmpChild.mask[i] = tmpChild.mask[i] + (1 << (totalDigits - 1 - digits))
                 tmpChild.address[i] = tmpChild.address[i] + (0 << (totalDigits - 1 - digits))
-                self.tmpNodeList.append(tmpChild)
+                tmpList.append(tmpChild)
 
                 # Add right child
                 tmpChild = Node(self, list(self.address), list(self.mask))
                 tmpChild.mask[i] = tmpChild.mask[i] + (1 << (totalDigits - 1 - digits))
                 tmpChild.address[i] = tmpChild.address[i] + (1 << (totalDigits - 1 - digits))
-                self.tmpNodeList.append(tmpChild)
+                tmpList.append(tmpChild)
 
             # this dimension needs two cut
             if dim[i] == 2:
@@ -84,33 +92,36 @@ class Node():
                 tmpChild = Node(self, list(self.address), list(self.mask))
                 tmpChild.mask[i] = tmpChild.mask[i] + (3 << (totalDigits - 2 - digits))
                 tmpChild.address[i] = tmpChild.address[i] + (0 << (totalDigits - 2 - digits))
-                self.tmpNodeList.append(tmpChild)
+                tmpList.append(tmpChild)
 
                 # Add second child
                 tmpChild = Node(self, list(self.address), list(self.mask))
                 tmpChild.mask[i] = tmpChild.mask[i] + (3 << (totalDigits - 2 - digits))
                 tmpChild.address[i] = tmpChild.address[i] + (1 << (totalDigits - 2 - digits))
-                self.tmpNodeList.append(tmpChild)
+                tmpList.append(tmpChild)
 
                 # Add third child
                 tmpChild = Node(self, list(self.address), list(self.mask))
                 tmpChild.mask[i] = tmpChild.mask[i] + (3 << (totalDigits - 2 - digits))
                 tmpChild.address[i] = tmpChild.address[i] + (2 << (totalDigits - 2 - digits))
-                self.tmpNodeList.append(tmpChild)
+                tmpList.append(tmpChild)
 
                 # Add fourth child
                 tmpChild = Node(self, list(self.address), list(self.mask))
                 tmpChild.mask[i] = tmpChild.mask[i] + (3 << (totalDigits - 2 - digits))
                 tmpChild.address[i] = tmpChild.address[i] + (3 << (totalDigits - 2 - digits))
-                self.tmpNodeList.append(tmpChild)
+                tmpList.append(tmpChild)
 
         # Add rules for each childNode
-        for childNode in self.tmpNodeList:
+        for childNode in tmpList:
             for rule in self.relatedRules:
                 if self.matchRuleAndNode(childNode, rule):
                     childNode.relatedRules.append(rule)
 
+        self.tmpNodeList[:] = [childNode for childNode in tmpList if len(childNode.relatedRules) > 0]
+
         sum = 0
+
         for childNode in self.tmpNodeList:
             sum += len(childNode.relatedRules)
 

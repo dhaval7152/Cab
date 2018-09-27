@@ -15,3 +15,9 @@ def class:
 ```
 
 - #### << in Python has very low priority, even lower than +/-
+
+- #### Delete element in list which meets some condition
+```
+# Get the sublist, whose elements don't meet the condition
+somelist[:] = [x for x in somelist if not determine(x)]
+```
