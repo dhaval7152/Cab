@@ -1,0 +1,31 @@
+1. Hardware test:
+
+OVS1
+1.Set up Netronome NIC and load OVS_CAB p4 file
+1.1 Following Github: https://github.com/zxc215/Bucket
+(***Note!!! Step 4 ovs directory should change to ovs_32***)
+2.Start CAB_Daemon
+2.1 Following /home/ovs1/.bashrc 
+(***Normally we use cab_run***)
+3.Start digest_listener
+3.1 Run digist_listener with rulefile:
+python digest_listener.py -f rulefile_name
+(***put rulefile under /home/ovs1/CAB_H/CAB_SDN-cython-api/metadata/ruleset/rulefile_name***)
+
+OVS2
+0.(Prepare): DPDK MoonGen
+0.1 Setup DPDK
+0.1.1 Setup Huge Page by: /home/ovs2/MoonGen/setup-hugetlbfs.sh
+0.1.2 same directory build.sh
+
+0.2 Bind interfaces to DPDK
+0.2.1 unbind interface from OS: sudo ifconfig [interface name] 0
+0.2.2 bind interface to DPDK: /home/ovs2/MoonGen/bind-interfaces.sh
+
+You are good to go
+
+4.Send packages with MoonGen
+4.1 Send packages: sudo /home/ovs2/MooGen examples/Test_Single_Flow.lua -s 100 -r 100 -f 0 1 0
+	-s:		package size
+	-f:		offset
+	-r:		sending speed(Mb/s)
