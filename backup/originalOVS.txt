@@ -1,0 +1,6 @@
+depend.sh
+start.sh
+ovs-vsctl show
+ovs-ofctl -O OpenFlow13 dump-flows br0
+ovs-ofctl -O OpenFlow13 add-flows br0 ruleFile
+ovs-ofctl -O OpenFlow13 del-flows br0

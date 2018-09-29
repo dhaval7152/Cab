@@ -4,9 +4,15 @@ OVS1
 1.Set up Netronome NIC and load OVS_CAB p4 file
 1.1 Following Github: https://github.com/zxc215/Bucket
 (***Note!!! Step 4 ovs directory should change to ovs_32***)
-2.Start CAB_Daemon
-2.1 Following /home/ovs1/.bashrc 
-(***Normally we use cab_run***)
+
+=============================================
+//2.Start CAB_Daemon
+//2.1 Following /home/ovs1/.bashrc 
+	cab_run:	run cab
+	cab_de:		clear rules
+=============================================
+(***Not necessary for software simulation, may cause unexpected errors)
+
 3.Start digest_listener
 3.1 Run digist_listener with rulefile:
 python digest_listener.py -f rulefile_name
