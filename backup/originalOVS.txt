@@ -4,3 +4,9 @@ ovs-vsctl show
 ovs-ofctl -O OpenFlow13 dump-flows br0
 ovs-ofctl -O OpenFlow13 add-flows br0 ruleFile
 ovs-ofctl -O OpenFlow13 del-flows br0
+
+http://docs.openvswitch.org/en/latest/intro/install/#installation-from-source
+
+https://viky.co.in/2016/08/21/getting-started-with-openvswitch/
+
+Please do not use apt-get to install openvswitch
