@@ -14,13 +14,14 @@ for line in f.readlines():
         mode += 1
         continue
     if (mode == 1):
-        single_left.append(lines[0])
-        single_right.append(lines[1])
+        single_left.append(float((lines[0])))
+        single_right.append(float(lines[1]))
     if (mode == 2):
-        random_left.append(lines[0])
-        random_right.append(lines[1])
+        random_left.append(float((lines[0])))
+        random_right.append(float(lines[1]))
     if (mode == 3):
-        mixed_left.append(lines[0])
-        mixed_right.append(lines[1])
+        mixed_left.append(float((lines[0])))
+        mixed_right.append(float(lines[1]))
 
 f.close()
+print single_left
