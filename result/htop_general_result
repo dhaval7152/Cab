@@ -1,0 +1,3 @@
+For single flow, all cpu usage 40% ~ 50%
+For random flow, all cpu usage 60% ~ 70%
+For elephant flow, all cpu usage 50% ~ 60%
