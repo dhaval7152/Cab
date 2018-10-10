@@ -1,0 +1,8 @@
+priority=1,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/0,nw_dst=10.0.0.1/0,tp_src=6000,actions=output:2
+priority=2,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/0,nw_dst=10.0.0.1/0,tp_dst=0/32768,actions=output:2
+priority=3,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/0,nw_dst=10.0.0.1/0,tp_dst=32768/32768,actions=output:2
+priority=4,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/0,nw_dst=10.0.0.1/0,tp_src=1234,actions=output:2
+priority=5,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/0,nw_dst=128.0.0.1/32,actions=output:2
+priority=6,dl_type=0x0800,nw_proto=17,nw_src=128.0.0.0/32,nw_dst=10.0.0.1/0,actions=output:2
+priority=7,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/0,nw_dst=10.0.0.1/32,actions=output:2
+priority=8,dl_type=0x0800,nw_proto=17,nw_src=10.0.0.0/32,nw_dst=10.0.0.1/0,actions=output:2
